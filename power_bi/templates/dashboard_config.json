@@ -1,0 +1,368 @@
+{
+  "dashboard_name": "Rapido Transportation Analytics Dashboard",
+  "created_date": "2025-08-29",
+  "version": "1.0",
+  "pages": [
+    {
+      "page_name": "Executive Dashboard",
+      "page_order": 1,
+      "description": "High-level KPIs, revenue trends, and business overview",
+      "visuals": [
+        {
+          "type": "KPI Card",
+          "title": "Total Revenue",
+          "measure": "Total Revenue",
+          "format": "\u20b9 #,##0",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          }
+        },
+        {
+          "type": "KPI Card",
+          "title": "Total Trips",
+          "measure": "Total Trips",
+          "format": "#,##0",
+          "position": {
+            "x": 220,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          }
+        },
+        {
+          "type": "KPI Card",
+          "title": "Average Revenue/Ride",
+          "measure": "Average Revenue Per Ride",
+          "format": "\u20b9 #,##0.00",
+          "position": {
+            "x": 440,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          }
+        },
+        {
+          "type": "KPI Card",
+          "title": "Surge Contribution %",
+          "measure": "Surge Percentage",
+          "format": "0.0%",
+          "position": {
+            "x": 660,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          }
+        },
+        {
+          "type": "Line Chart",
+          "title": "Revenue Trend by Month",
+          "x_axis": "DimTime[month_name]",
+          "y_axis": "Total Revenue",
+          "position": {
+            "x": 0,
+            "y": 120,
+            "width": 400,
+            "height": 250
+          }
+        },
+        {
+          "type": "Donut Chart",
+          "title": "Revenue by Vehicle Type",
+          "legend": "DimVehicle[vehicle_type]",
+          "values": [
+            "Bike Revenue",
+            "Auto Revenue",
+            "Cab Revenue"
+          ],
+          "position": {
+            "x": 420,
+            "y": 120,
+            "width": 300,
+            "height": 250
+          }
+        },
+        {
+          "type": "Horizontal Bar Chart",
+          "title": "Top 10 Routes by Revenue",
+          "y_axis": "FactRides[route]",
+          "x_axis": "Total Revenue",
+          "position": {
+            "x": 740,
+            "y": 120,
+            "width": 400,
+            "height": 250
+          }
+        },
+        {
+          "type": "Table",
+          "title": "Vehicle Performance Summary",
+          "columns": [
+            "DimVehicle[vehicle_type]",
+            "Total Trips",
+            "Total Revenue",
+            "Average Revenue Per Ride"
+          ],
+          "position": {
+            "x": 0,
+            "y": 390,
+            "width": 500,
+            "height": 200
+          }
+        }
+      ]
+    },
+    {
+      "page_name": "Time & Demand Analysis",
+      "page_order": 2,
+      "description": "Rush hour patterns, time-based demand, and scheduling insights",
+      "visuals": [
+        {
+          "type": "Line Chart",
+          "title": "Hourly Demand Pattern (24 Hours)",
+          "x_axis": "DimHour[hour]",
+          "y_axis": "Total Trips",
+          "secondary_y": "Average Surge Multiplier",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 600,
+            "height": 250
+          }
+        },
+        {
+          "type": "Column Chart",
+          "title": "Rush Hour vs Regular Hours",
+          "x_axis": "DimHour[is_rush_hour]",
+          "y_axis": [
+            "Rush Hour Revenue",
+            "Total Revenue"
+          ],
+          "position": {
+            "x": 620,
+            "y": 0,
+            "width": 400,
+            "height": 250
+          }
+        },
+        {
+          "type": "Stacked Bar Chart",
+          "title": "Day of Week Performance",
+          "x_axis": "DimTime[day_name]",
+          "y_axis": "Total Revenue",
+          "legend": "DimVehicle[vehicle_type]",
+          "position": {
+            "x": 0,
+            "y": 270,
+            "width": 500,
+            "height": 250
+          }
+        },
+        {
+          "type": "Area Chart",
+          "title": "Weekend vs Weekday Revenue",
+          "x_axis": "DimTime[date]",
+          "y_axis": [
+            "Weekend Revenue",
+            "Weekday Revenue"
+          ],
+          "position": {
+            "x": 520,
+            "y": 270,
+            "width": 500,
+            "height": 250
+          }
+        },
+        {
+          "type": "Heat Map",
+          "title": "Hour vs Day of Week Revenue Matrix",
+          "x_axis": "DimHour[hour]",
+          "y_axis": "DimTime[day_name]",
+          "values": "Total Revenue",
+          "position": {
+            "x": 0,
+            "y": 540,
+            "width": 600,
+            "height": 200
+          }
+        },
+        {
+          "type": "KPI Cards Row",
+          "cards": [
+            {
+              "title": "Morning Rush Revenue",
+              "measure": "Rush Hour Revenue (8-9 AM)"
+            },
+            {
+              "title": "Evening Rush Revenue",
+              "measure": "Rush Hour Revenue (5:30-6:30 PM)"
+            },
+            {
+              "title": "Peak Hour",
+              "measure": "Highest Traffic Hour"
+            }
+          ],
+          "position": {
+            "x": 620,
+            "y": 540,
+            "width": 400,
+            "height": 200
+          }
+        }
+      ]
+    },
+    {
+      "page_name": "Weather Impact Analysis",
+      "page_order": 3,
+      "description": "Weather-based surge analysis, rain impact, and seasonal patterns",
+      "visuals": [
+        {
+          "type": "Column Chart",
+          "title": "Weather Conditions Impact on Revenue",
+          "x_axis": "DimWeather[weather_condition]",
+          "y_axis": "Total Revenue",
+          "secondary_y": "Average Surge Multiplier",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 500,
+            "height": 250
+          }
+        },
+        {
+          "type": "Gauge Chart",
+          "title": "Rain Premium vs Clear Weather",
+          "measure": "Weather Premium",
+          "min_value": 0,
+          "max_value": 1,
+          "target": 0.38,
+          "position": {
+            "x": 520,
+            "y": 0,
+            "width": 250,
+            "height": 250
+          }
+        },
+        {
+          "type": "Clustered Bar Chart",
+          "title": "Rain vs Clear Weather Comparison",
+          "categories": [
+            "Total Trips",
+            "Average Price",
+            "Average Surge"
+          ],
+          "series": [
+            "Rain Revenue",
+            "Clear Revenue"
+          ],
+          "position": {
+            "x": 790,
+            "y": 0,
+            "width": 350,
+            "height": 250
+          }
+        },
+        {
+          "type": "Scatter Plot",
+          "title": "Temperature vs Revenue Correlation",
+          "x_axis": "FactRides[temperature]",
+          "y_axis": "FactRides[final_price]",
+          "size": "FactRides[surge_multiplier]",
+          "position": {
+            "x": 0,
+            "y": 270,
+            "width": 400,
+            "height": 250
+          }
+        },
+        {
+          "type": "Line Chart",
+          "title": "Monthly Weather Impact Trends",
+          "x_axis": "DimTime[month_name]",
+          "y_axis": "Total Revenue",
+          "legend": "DimWeather[weather_condition]",
+          "position": {
+            "x": 420,
+            "y": 270,
+            "width": 500,
+            "height": 250
+          }
+        },
+        {
+          "type": "Waterfall Chart",
+          "title": "Revenue Impact by Weather Conditions",
+          "categories": [
+            "Clear",
+            "Clouds",
+            "Haze",
+            "Rain",
+            "Thunderstorm"
+          ],
+          "values": "Weather Revenue Impact",
+          "position": {
+            "x": 940,
+            "y": 270,
+            "width": 300,
+            "height": 250
+          }
+        },
+        {
+          "type": "Table",
+          "title": "Weather Impact Summary",
+          "columns": [
+            "DimWeather[weather_condition]",
+            "Total Trips",
+            "Total Revenue",
+            "Average Surge Multiplier",
+            "Weather Premium %"
+          ],
+          "position": {
+            "x": 0,
+            "y": 540,
+            "width": 700,
+            "height": 200
+          }
+        },
+        {
+          "type": "Card Visual",
+          "title": "Extreme Weather Revenue",
+          "measure": "Storm Revenue Boost",
+          "description": "Revenue from Thunderstorm conditions",
+          "position": {
+            "x": 720,
+            "y": 540,
+            "width": 200,
+            "height": 100
+          }
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "type": "Date Range Slicer",
+      "field": "DimTime[date]",
+      "position": "top"
+    },
+    {
+      "type": "Dropdown Slicer",
+      "field": "DimVehicle[vehicle_type]",
+      "position": "top"
+    },
+    {
+      "type": "Multi-select Slicer",
+      "field": "DimWeather[weather_condition]",
+      "position": "top"
+    }
+  ],
+  "theme": {
+    "primary_color": "#1f77b4",
+    "secondary_color": "#ff7f0e",
+    "accent_color": "#2ca02c",
+    "background_color": "#ffffff",
+    "text_color": "#333333",
+    "font_family": "Segoe UI"
+  }
+}

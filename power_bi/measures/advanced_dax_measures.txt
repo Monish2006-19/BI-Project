@@ -1,0 +1,266 @@
+
+# Advanced DAX Measures for Rapido Transportation Dashboard
+# Copy these measures into Power BI Desktop
+
+## Core Revenue Measures
+Total Revenue = SUM(FactRides[final_price])
+Total Base Revenue = SUM(FactRides[base_price])
+Surge Revenue = [Total Revenue] - [Total Base Revenue]
+Average Revenue Per Ride = AVERAGE(FactRides[final_price])
+Revenue Per KM = DIVIDE([Total Revenue], SUM(FactRides[distance_km]))
+
+## Trip Volume Measures  
+Total Trips = COUNTROWS(FactRides)
+Average Distance = AVERAGE(FactRides[distance_km])
+Total Distance = SUM(FactRides[distance_km])
+
+## Surge Analysis Measures
+Average Surge Multiplier = AVERAGE(FactRides[surge_multiplier])
+Surge Percentage = DIVIDE([Surge Revenue], [Total Revenue]) * 100
+Trips with Surge = CALCULATE([Total Trips], FactRides[surge_multiplier] > 1.2)
+Surge Trip Percentage = DIVIDE([Trips with Surge], [Total Trips]) * 100
+
+## Time Intelligence Measures
+Revenue MTD = TOTALMTD([Total Revenue], DimTime[date])
+Revenue QTD = TOTALQTD([Total Revenue], DimTime[date])
+Revenue YTD = TOTALYTD([Total Revenue], DimTime[date])
+
+Revenue Previous Month = 
+CALCULATE(
+    [Total Revenue],
+    PREVIOUSMONTH(DimTime[date])
+)
+
+Revenue Growth MoM = 
+VAR CurrentMonth = [Total Revenue]
+VAR PreviousMonth = [Revenue Previous Month]
+RETURN 
+IF(
+    NOT ISBLANK(PreviousMonth),
+    DIVIDE(CurrentMonth - PreviousMonth, PreviousMonth) * 100,
+    BLANK()
+)
+
+## Weather Impact Measures
+Rain Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimWeather[weather_condition] = "Rain"
+)
+
+Clear Revenue = 
+CALCULATE(
+    [Total Revenue], 
+    DimWeather[weather_condition] = "Clear"
+)
+
+Weather Premium = 
+VAR RainAvg = CALCULATE(AVERAGE(FactRides[final_price]), DimWeather[weather_condition] = "Rain")
+VAR ClearAvg = CALCULATE(AVERAGE(FactRides[final_price]), DimWeather[weather_condition] = "Clear")
+RETURN DIVIDE(RainAvg, ClearAvg) - 1
+
+Thunderstorm Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimWeather[weather_condition] = "Thunderstorm"  
+)
+
+Storm Revenue Boost = 
+VAR StormAvgPrice = CALCULATE(AVERAGE(FactRides[final_price]), DimWeather[weather_condition] = "Thunderstorm")
+VAR OverallAvgPrice = AVERAGE(FactRides[final_price])
+RETURN DIVIDE(StormAvgPrice, OverallAvgPrice) - 1
+
+## Rush Hour Analysis
+Rush Hour Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimHour[is_rush_hour] = TRUE
+)
+
+Rush Hour Trips = 
+CALCULATE(
+    [Total Trips], 
+    DimHour[is_rush_hour] = TRUE
+)
+
+Morning Rush Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimHour[hour] IN {8, 9}
+)
+
+Evening Rush Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimHour[hour] IN {17, 18}
+)
+
+Peak Hour Indicator = 
+VAR CurrentHour = SELECTEDVALUE(DimHour[hour])
+VAR HourTrips = CALCULATE([Total Trips], DimHour[hour] = CurrentHour)
+VAR MaxTrips = MAXX(ALL(DimHour), CALCULATE([Total Trips], DimHour[hour] = EARLIER(DimHour[hour])))
+RETURN 
+IF(
+    HourTrips = MaxTrips,
+    "🔥 Peak Hour",
+    IF(
+        SELECTEDVALUE(DimHour[is_rush_hour]),
+        "⚡ Rush Hour", 
+        "📊 Regular Hour"
+    )
+)
+
+## Vehicle Performance Measures
+Bike Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimVehicle[vehicle_type] = "bike"
+)
+
+Auto Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimVehicle[vehicle_type] = "auto" 
+)
+
+Cab Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimVehicle[vehicle_type] = "cab"
+)
+
+Vehicle Revenue Share = 
+VAR SelectedVehicleRevenue = 
+CALCULATE(
+    [Total Revenue],
+    VALUES(DimVehicle[vehicle_type])
+)
+RETURN DIVIDE(SelectedVehicleRevenue, [Total Revenue]) * 100
+
+## Service Quality Measures
+Average Wait Time = AVERAGE(FactRides[waiting_time_minutes])
+
+Service Quality Score = 
+VAR AvgWait = [Average Wait Time]
+RETURN 
+SWITCH(
+    TRUE(),
+    AvgWait <= 2, 100,
+    AvgWait <= 3, 90,
+    AvgWait <= 4, 80, 
+    AvgWait <= 5, 70,
+    AvgWait <= 7, 60,
+    50
+)
+
+Trips Under 5 Min Wait = 
+CALCULATE(
+    [Total Trips],
+    FactRides[waiting_time_minutes] <= 5
+)
+
+Service Quality Percentage = 
+DIVIDE([Trips Under 5 Min Wait], [Total Trips]) * 100
+
+## VIT University Analysis
+VIT Revenue = 
+CALCULATE(
+    [Total Revenue],
+    OR(
+        CONTAINSSTRING(FactRides[from_location], "VIT"),
+        CONTAINSSTRING(FactRides[to_location], "VIT")
+    )
+)
+
+VIT Trips = 
+CALCULATE(
+    [Total Trips],
+    OR(
+        CONTAINSSTRING(FactRides[from_location], "VIT"),
+        CONTAINSSTRING(FactRides[to_location], "VIT")
+    )
+)
+
+VIT Revenue Share = DIVIDE([VIT Revenue], [Total Revenue]) * 100
+
+Non-VIT Revenue = [Total Revenue] - [VIT Revenue]
+
+VIT vs Non-VIT Ratio = DIVIDE([VIT Revenue], [Non-VIT Revenue])
+
+## Weekend Analysis
+Weekend Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimTime[is_weekend] = TRUE
+)
+
+Weekday Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DimTime[is_weekend] = FALSE  
+)
+
+Weekend vs Weekday Premium = 
+VAR WeekendAvg = DIVIDE([Weekend Revenue], CALCULATE([Total Trips], DimTime[is_weekend] = TRUE))
+VAR WeekdayAvg = DIVIDE([Weekday Revenue], CALCULATE([Total Trips], DimTime[is_weekend] = FALSE))
+RETURN DIVIDE(WeekendAvg, WeekdayAvg) - 1
+
+## Dynamic Text Measures
+Revenue Trend Indicator = 
+VAR CurrentRevenue = [Total Revenue]
+VAR PreviousRevenue = [Revenue Previous Month]
+RETURN 
+SWITCH(
+    TRUE(),
+    ISBLANK(PreviousRevenue), "📊 New Period",
+    CurrentRevenue > PreviousRevenue * 1.1, "📈 Strong Growth",
+    CurrentRevenue > PreviousRevenue * 1.05, "↗️ Growing", 
+    CurrentRevenue > PreviousRevenue * 0.95, "➡️ Stable",
+    CurrentRevenue > PreviousRevenue * 0.9, "↘️ Declining",
+    "📉 Significant Decline"
+)
+
+Weather Impact Summary = 
+VAR SelectedWeather = SELECTEDVALUE(DimWeather[weather_condition])
+VAR WeatherSurge = CALCULATE(AVERAGE(FactRides[surge_multiplier]), DimWeather[weather_condition] = SelectedWeather)
+RETURN 
+SelectedWeather & " - " & FORMAT(WeatherSurge, "0.00") & "x surge"
+
+## Ranking Measures  
+Route Revenue Rank = 
+RANKX(
+    ALL(FactRides[route]),
+    CALCULATE([Total Revenue], VALUES(FactRides[route])),
+    , DESC
+)
+
+Hour Revenue Rank = 
+RANKX(
+    ALL(DimHour[hour]),
+    CALCULATE([Total Revenue], VALUES(DimHour[hour])),
+    , DESC
+)
+
+## Color Coding Measures
+Surge Level Color = 
+VAR SurgeValue = AVERAGE(FactRides[surge_multiplier])
+RETURN 
+SWITCH(
+    TRUE(),
+    SurgeValue >= 2, "#FF0000",      // Red for high surge
+    SurgeValue >= 1.5, "#FF8C00",   // Orange for medium surge  
+    SurgeValue >= 1.2, "#FFD700",   // Yellow for low surge
+    "#00FF00"                       // Green for normal pricing
+)
+
+Revenue Performance Color = 
+VAR Growth = [Revenue Growth MoM]
+RETURN 
+SWITCH(
+    TRUE(),
+    Growth > 10, "#00AA00",     // Dark green for strong growth
+    Growth > 5, "#90EE90",      // Light green for good growth
+    Growth > -5, "#FFFF00",     // Yellow for stable
+    Growth > -10, "#FFA500",    // Orange for decline
+    "#FF0000"                   // Red for significant decline
+)

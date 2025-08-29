@@ -1,0 +1,118 @@
+{
+  "name": "Rapido Transportation Analytics",
+  "version": "1.0.0",
+  "dataModel": {
+    "tables": [
+      {
+        "name": "FactRides",
+        "type": "fact",
+        "source": "rapido_dashboard_data.xlsx",
+        "sheet": "FactRides",
+        "key_columns": [
+          "ride_id"
+        ],
+        "measures": [
+          "distance_km",
+          "base_price",
+          "final_price",
+          "surge_multiplier",
+          "waiting_time_minutes",
+          "price_premium_percent",
+          "surge_amount",
+          "price_per_km"
+        ]
+      },
+      {
+        "name": "DimTime",
+        "type": "dimension",
+        "source": "rapido_dashboard_data.xlsx",
+        "sheet": "DimTime",
+        "key_columns": [
+          "date"
+        ],
+        "attributes": [
+          "year",
+          "month",
+          "quarter",
+          "month_name",
+          "day_name",
+          "is_weekend"
+        ]
+      },
+      {
+        "name": "DimHour",
+        "type": "dimension",
+        "source": "rapido_dashboard_data.xlsx",
+        "sheet": "DimHour",
+        "key_columns": [
+          "hour"
+        ],
+        "attributes": [
+          "time_period",
+          "is_rush_hour"
+        ]
+      },
+      {
+        "name": "DimVehicle",
+        "type": "dimension",
+        "source": "rapido_dashboard_data.xlsx",
+        "sheet": "DimVehicle",
+        "key_columns": [
+          "vehicle_type"
+        ],
+        "attributes": [
+          "capacity",
+          "category"
+        ]
+      },
+      {
+        "name": "DimWeather",
+        "type": "dimension",
+        "source": "rapido_dashboard_data.xlsx",
+        "sheet": "DimWeather",
+        "key_columns": [
+          "weather_condition"
+        ],
+        "attributes": [
+          "weather_main",
+          "weather_description",
+          "impact_level"
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "from_table": "FactRides",
+        "from_column": "date",
+        "to_table": "DimTime",
+        "to_column": "date",
+        "cardinality": "many_to_one",
+        "cross_filter": "single"
+      },
+      {
+        "from_table": "FactRides",
+        "from_column": "hour",
+        "to_table": "DimHour",
+        "to_column": "hour",
+        "cardinality": "many_to_one",
+        "cross_filter": "single"
+      },
+      {
+        "from_table": "FactRides",
+        "from_column": "vehicle_type",
+        "to_table": "DimVehicle",
+        "to_column": "vehicle_type",
+        "cardinality": "many_to_one",
+        "cross_filter": "single"
+      },
+      {
+        "from_table": "FactRides",
+        "from_column": "weather_condition",
+        "to_table": "DimWeather",
+        "to_column": "weather_condition",
+        "cardinality": "many_to_one",
+        "cross_filter": "single"
+      }
+    ]
+  }
+}
