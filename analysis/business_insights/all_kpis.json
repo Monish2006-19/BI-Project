@@ -1,0 +1,105 @@
+{
+  "total_revenue": 13170756.08,
+  "avg_revenue_per_ride": 148.08918662439004,
+  "revenue_by_vehicle": {
+    "auto": 5265013.32,
+    "bike": 4852008.87,
+    "cab": 3053733.89
+  },
+  "surge_revenue_impact": 4687129.96,
+  "avg_price_premium_percent": 55.22669720415606,
+  "revenue_per_km": 23.22239194185179,
+  "avg_cost_efficiency_ratio": 1.5522669720415605,
+  "total_trip_volume": 88938,
+  "avg_trip_distance": 6.376999707661517,
+  "fleet_utilization_by_vehicle": {
+    "bike": 0.5021925386224111,
+    "auto": 0.34822010839011447,
+    "cab": 0.14958735298747441
+  },
+  "avg_waiting_time": 3.9917020845982596,
+  "trip_completion_rate": 1.0,
+  "peak_hour_trip_distribution": {
+    "18": 6954,
+    "8": 6588,
+    "17": 5490,
+    "9": 5124
+  },
+  "distance_category_distribution": {
+    "Medium": 0.5170230947401561,
+    "Long": 0.36793046841620003,
+    "Short": 0.11504643684364389
+  },
+  "morning_rush_demand": 11712,
+  "evening_rush_demand": 12444,
+  "weekend_vs_weekday_performance": {
+    "weekend": 4061119.1099999994,
+    "weekday": 9109636.969999999
+  },
+  "hourly_demand_pattern": {
+    "0": 1464,
+    "1": 732,
+    "2": 732,
+    "3": 732,
+    "4": 1098,
+    "5": 1830,
+    "6": 3294,
+    "7": 5856,
+    "8": 6588,
+    "9": 5124,
+    "10": 3660,
+    "11": 4026,
+    "12": 4758,
+    "13": 4392,
+    "14": 3660,
+    "15": 4026,
+    "16": 4392,
+    "17": 5490,
+    "18": 6954,
+    "19": 6222,
+    "20": 5124,
+    "21": 4026,
+    "22": 2928,
+    "23": 1830
+  },
+  "day_of_week_performance": {
+    "Friday": 1806942.3,
+    "Monday": 1896663.57,
+    "Saturday": 2024790.77,
+    "Sunday": 2036328.34,
+    "Thursday": 1770041.75,
+    "Tuesday": 1830407.32,
+    "Wednesday": 1805582.03
+  },
+  "monthly_trends": {
+    "April": 1171675.02,
+    "August": 1077597.82,
+    "December": 1201580.28,
+    "February": 987471.27,
+    "January": 1070538.1,
+    "July": 1072751.32,
+    "June": 1038731.46,
+    "March": 1078637.78,
+    "May": 1191786.54,
+    "November": 1174953.6,
+    "October": 1076327.46,
+    "September": 1028705.43
+  },
+  "rush_hour_premium": 9.452059452895938,
+  "weather_surge_frequency": {
+    "Clear": 1.3702980492841794,
+    "Clouds": 1.438310319905664,
+    "Haze": 1.5825706771860617,
+    "Rain": 1.896495899337153,
+    "Thunderstorm": 2.2820130307796
+  },
+  "rain_vs_clear_multiplier": 1.3840024805755584,
+  "weather_demand_correlation": {
+    "Clear": 35833,
+    "Clouds": 26289,
+    "Haze": 4563,
+    "Rain": 17802,
+    "Thunderstorm": 4451
+  },
+  "precipitation_impact": {
+    

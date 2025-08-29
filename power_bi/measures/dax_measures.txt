@@ -1,0 +1,45 @@
+
+# Key DAX Measures for Rapido Transportation Dashboard
+
+Total Revenue = SUM(FactRides[final_price])
+Total Trips = COUNTROWS(FactRides)
+Average Revenue Per Ride = AVERAGE(FactRides[final_price])
+Surge Revenue = SUM(FactRides[surge_amount])
+Surge Percentage = DIVIDE([Surge Revenue], [Total Revenue]) * 100
+
+# Time Intelligence
+Revenue MTD = TOTALMTD([Total Revenue], DimTime[date])
+Revenue QTD = TOTALQTD([Total Revenue], DimTime[date])
+Revenue Growth = 
+VAR CurrentMonth = [Total Revenue]
+VAR PreviousMonth = CALCULATE([Total Revenue], PREVIOUSMONTH(DimTime[date]))
+RETURN DIVIDE(CurrentMonth - PreviousMonth, PreviousMonth) * 100
+
+# Weather Analysis
+Rain Revenue = CALCULATE([Total Revenue], DimWeather[weather_condition] = "Rain")
+Clear Revenue = CALCULATE([Total Revenue], DimWeather[weather_condition] = "Clear")
+Weather Premium = DIVIDE([Rain Revenue], [Clear Revenue]) - 1
+
+# Rush Hour Analysis
+Rush Hour Revenue = CALCULATE([Total Revenue], DimHour[is_rush_hour] = TRUE)
+Rush Hour Trips = CALCULATE([Total Trips], DimHour[is_rush_hour] = TRUE)
+
+# Vehicle Performance
+Bike Revenue = CALCULATE([Total Revenue], DimVehicle[vehicle_type] = "bike")
+Auto Revenue = CALCULATE([Total Revenue], DimVehicle[vehicle_type] = "auto")
+Cab Revenue = CALCULATE([Total Revenue], DimVehicle[vehicle_type] = "cab")
+
+# Service Quality
+Average Wait Time = AVERAGE(FactRides[waiting_time_minutes])
+Service Quality Score = 1 / ([Average Wait Time] + 1) * 100
+
+# KPIs
+Revenue Per KM = DIVIDE([Total Revenue], SUM(FactRides[distance_km]))
+Average Surge Multiplier = AVERAGE(FactRides[surge_multiplier])
+VIT Revenue = 
+CALCULATE([Total Revenue], 
+    OR(
+        CONTAINSSTRING(FactRides[from_location], "VIT"),
+        CONTAINSSTRING(FactRides[to_location], "VIT")
+    )
+)
