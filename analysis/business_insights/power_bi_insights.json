@@ -1,0 +1,10 @@
+{
+  "total_revenue": 13170756.08,
+  "total_trips": 88938,
+  "avg_revenue_per_ride": 148.08918662439004,
+  "surge_contribution": 35.58740235966772,
+  "vit_dependency": 60.2689514043491,
+  "peak_hour": "18",
+  "top_route": "Katpadi \u2192 Vellore Fort",
+  "rain_premium": 38.34941254763022
+}

@@ -12,6 +12,7 @@ This script performs deep analysis on the transportation dataset covering:
 
 import pandas as pd
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
@@ -43,6 +44,9 @@ class RapidoBusinessIntelligence:
         # Convert datetime columns
         self.df['datetime'] = pd.to_datetime(self.df['datetime'])
         self.df['date'] = pd.to_datetime(self.df['date'])
+        
+        # Create route column from from_location and to_location
+        self.df['route'] = self.df['from_location'] + ' → ' + self.df['to_location']
         
         # Create additional time features for analysis
         self.df['month_name'] = self.df['datetime'].dt.month_name()
@@ -224,6 +228,329 @@ class RapidoBusinessIntelligence:
         
         print("✅ All 45 KPIs calculated successfully!")
         return self.kpis
+    
+    def create_python_visualizations(self):
+        """Generate comprehensive Python visualizations for analysis"""
+        print("\n🎨 Creating Python Visualizations...")
+        
+        # Create visualizations directory
+        viz_dir = "visualizations/charts"
+        os.makedirs(viz_dir, exist_ok=True)
+        
+        # 1. Revenue Trend Analysis
+        self._create_revenue_trend_chart(viz_dir)
+        
+        # 2. Time-based Analysis
+        self._create_time_analysis_charts(viz_dir)
+        
+        # 3. Weather Impact Analysis
+        self._create_weather_analysis_charts(viz_dir)
+        
+        # 4. Route Performance Analysis
+        self._create_route_analysis_charts(viz_dir)
+        
+        # 5. Vehicle Analysis
+        self._create_vehicle_analysis_charts(viz_dir)
+        
+        # 6. Interactive Dashboard
+        self._create_interactive_dashboard(viz_dir)
+        
+        print(f"✅ All visualizations saved to: {viz_dir}")
+        return viz_dir
+    
+    def _create_revenue_trend_chart(self, viz_dir):
+        """Create revenue trend analysis charts"""
+        # Monthly revenue trend
+        monthly_revenue = self.df.groupby(self.df['date'].dt.to_period('M'))['final_price'].sum()
+        
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=monthly_revenue.index.astype(str),
+            y=monthly_revenue.values,
+            mode='lines+markers',
+            name='Monthly Revenue',
+            line=dict(color='#2E86AB', width=3),
+            marker=dict(size=8)
+        ))
+        
+        fig.update_layout(
+            title='Monthly Revenue Trend - Rapido Transportation',
+            xaxis_title='Month',
+            yaxis_title='Revenue (₹)',
+            template='plotly_white',
+            height=400
+        )
+        
+        fig.write_html(f"{viz_dir}/revenue_trend.html")
+        print("  ✓ Revenue trend chart created")
+    
+    def _create_time_analysis_charts(self, viz_dir):
+        """Create time-based analysis charts"""
+        # Hourly demand pattern
+        hourly_data = self.df.groupby('hour').agg({
+            'final_price': ['sum', 'count', 'mean'],
+            'surge_multiplier': 'mean'
+        }).round(2)
+        
+        hourly_data.columns = ['Total_Revenue', 'Trip_Count', 'Avg_Revenue', 'Avg_Multiplier']
+        
+        # Create subplot for hourly analysis
+        fig = make_subplots(
+            rows=2, cols=2,
+            subplot_titles=('Hourly Trip Volume', 'Hourly Revenue', 'Average Multiplier by Hour', 'Rush Hour vs Regular'),
+            specs=[[{"secondary_y": False}, {"secondary_y": False}],
+                   [{"secondary_y": False}, {"secondary_y": False}]]
+        )
+        
+        # Trip volume by hour
+        fig.add_trace(
+            go.Bar(x=hourly_data.index, y=hourly_data['Trip_Count'], name='Trip Count'),
+            row=1, col=1
+        )
+        
+        # Revenue by hour  
+        fig.add_trace(
+            go.Scatter(x=hourly_data.index, y=hourly_data['Total_Revenue'], 
+                      mode='lines+markers', name='Revenue'),
+            row=1, col=2
+        )
+        
+        # Multiplier by hour
+        fig.add_trace(
+            go.Bar(x=hourly_data.index, y=hourly_data['Avg_Multiplier'], name='Avg Multiplier'),
+            row=2, col=1
+        )
+        
+        # Rush hour comparison
+        rush_comparison = self.df.groupby('is_rush_hour')['final_price'].agg(['sum', 'count'])
+        fig.add_trace(
+            go.Bar(x=['Regular Hours', 'Rush Hours'], y=rush_comparison['sum'], name='Revenue Comparison'),
+            row=2, col=2
+        )
+        
+        fig.update_layout(height=800, title_text="Time-Based Analysis Dashboard")
+        fig.write_html(f"{viz_dir}/time_analysis.html")
+        print("  ✓ Time analysis charts created")
+    
+    def _create_weather_analysis_charts(self, viz_dir):
+        """Create weather impact analysis charts"""
+        weather_analysis = self.df.groupby('weather_condition').agg({
+            'final_price': ['sum', 'mean', 'count'],
+            'surge_multiplier': 'mean',
+            'waiting_time_minutes': 'mean'
+        }).round(2)
+        
+        weather_analysis.columns = ['Total_Revenue', 'Avg_Revenue', 'Trip_Count', 'Avg_Multiplier', 'Avg_Wait']
+        
+        # Weather impact visualization
+        fig = make_subplots(
+            rows=2, cols=2,
+            subplot_titles=('Revenue by Weather', 'Average Multiplier', 'Trip Count', 'Waiting Time'),
+            specs=[[{"type": "bar"}, {"type": "bar"}],
+                   [{"type": "bar"}, {"type": "bar"}]]
+        )
+        
+        colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8']
+        
+        fig.add_trace(
+            go.Bar(x=weather_analysis.index, y=weather_analysis['Total_Revenue'], 
+                   marker_color=colors, name='Revenue'),
+            row=1, col=1
+        )
+        
+        fig.add_trace(
+            go.Bar(x=weather_analysis.index, y=weather_analysis['Avg_Multiplier'],
+                   marker_color=colors, name='Multiplier'),
+            row=1, col=2
+        )
+        
+        fig.add_trace(
+            go.Bar(x=weather_analysis.index, y=weather_analysis['Trip_Count'],
+                   marker_color=colors, name='Trips'),
+            row=2, col=1
+        )
+        
+        fig.add_trace(
+            go.Bar(x=weather_analysis.index, y=weather_analysis['Avg_Wait'],
+                   marker_color=colors, name='Wait Time'),
+            row=2, col=2
+        )
+        
+        fig.update_layout(height=600, title_text="Weather Impact Analysis")
+        fig.write_html(f"{viz_dir}/weather_analysis.html")
+        print("  ✓ Weather analysis charts created")
+    
+    def _create_route_analysis_charts(self, viz_dir):
+        """Create route performance analysis"""
+        # Top 10 routes by revenue
+        top_routes = self.df.groupby('route')['final_price'].sum().sort_values(ascending=False).head(10)
+        
+        fig = go.Figure(data=[
+            go.Bar(x=top_routes.values, y=top_routes.index, orientation='h',
+                   marker_color='#2E86AB')
+        ])
+        
+        fig.update_layout(
+            title='Top 10 Routes by Revenue',
+            xaxis_title='Revenue (₹)',
+            yaxis_title='Route',
+            height=500
+        )
+        
+        fig.write_html(f"{viz_dir}/route_analysis.html")
+        print("  ✓ Route analysis chart created")
+    
+    def _create_vehicle_analysis_charts(self, viz_dir):
+        """Create vehicle performance analysis"""
+        vehicle_data = self.df.groupby('vehicle_type').agg({
+            'final_price': ['sum', 'mean', 'count'],
+            'distance_km': 'mean',
+            'waiting_time_minutes': 'mean'
+        }).round(2)
+        
+        vehicle_data.columns = ['Total_Revenue', 'Avg_Revenue', 'Trip_Count', 'Avg_Distance', 'Avg_Wait']
+        
+        # Vehicle performance pie chart
+        fig = go.Figure(data=[go.Pie(
+            labels=vehicle_data.index,
+            values=vehicle_data['Total_Revenue'],
+            hole=0.4,
+            marker_colors=['#FF6B6B', '#4ECDC4', '#45B7D1']
+        )])
+        
+        fig.update_layout(
+            title='Revenue Distribution by Vehicle Type',
+            height=400
+        )
+        
+        fig.write_html(f"{viz_dir}/vehicle_analysis.html")
+        print("  ✓ Vehicle analysis chart created")
+    
+    def _create_interactive_dashboard(self, viz_dir):
+        """Create comprehensive interactive dashboard"""
+        # Create a comprehensive dashboard combining all insights
+        fig = make_subplots(
+            rows=3, cols=3,
+            subplot_titles=('Monthly Revenue', 'Hourly Demand', 'Weather Impact',
+                          'Vehicle Distribution', 'Top Routes', 'Rush Hour Analysis',
+                          'Premium Distribution', 'VIT vs Non-VIT', 'Service Quality'),
+            specs=[[{"type": "scatter"}, {"type": "bar"}, {"type": "bar"}],
+                   [{"type": "pie"}, {"type": "bar"}, {"type": "bar"}],
+                   [{"type": "histogram"}, {"type": "bar"}, {"type": "indicator"}]]
+        )
+        
+        # Monthly revenue trend
+        monthly_revenue = self.df.groupby(self.df['date'].dt.to_period('M'))['final_price'].sum()
+        fig.add_trace(
+            go.Scatter(x=monthly_revenue.index.astype(str), y=monthly_revenue.values,
+                      mode='lines+markers', name='Monthly Revenue'),
+            row=1, col=1
+        )
+        
+        # Hourly demand
+        hourly_trips = self.df.groupby('hour').size()
+        fig.add_trace(
+            go.Bar(x=hourly_trips.index, y=hourly_trips.values, name='Hourly Trips'),
+            row=1, col=2
+        )
+        
+        # Weather impact
+        weather_revenue = self.df.groupby('weather_condition')['final_price'].sum()
+        fig.add_trace(
+            go.Bar(x=weather_revenue.index, y=weather_revenue.values, name='Weather Revenue'),
+            row=1, col=3
+        )
+        
+        # Vehicle distribution
+        vehicle_revenue = self.df.groupby('vehicle_type')['final_price'].sum()
+        fig.add_trace(
+            go.Pie(labels=vehicle_revenue.index, values=vehicle_revenue.values, name='Vehicle Revenue'),
+            row=2, col=1
+        )
+        
+        # Top 5 routes
+        top_routes = self.df.groupby('route')['final_price'].sum().sort_values(ascending=False).head(5)
+        fig.add_trace(
+            go.Bar(x=top_routes.index, y=top_routes.values, name='Top Routes'),
+            row=2, col=2
+        )
+        
+        # Rush hour analysis
+        rush_data = self.df.groupby('is_rush_hour')['final_price'].sum()
+        fig.add_trace(
+            go.Bar(x=['Regular', 'Rush'], y=rush_data.values, name='Rush Analysis'),
+            row=2, col=3
+        )
+        
+        # Premium distribution
+        fig.add_trace(
+            go.Histogram(x=self.df['price_premium_percent'], name='Premium Distribution'),
+            row=3, col=1
+        )
+        
+        # VIT analysis
+        vit_revenue = [
+            self.df[self.df['route'].str.contains('VIT', na=False)]['final_price'].sum(),
+            self.df[~self.df['route'].str.contains('VIT', na=False)]['final_price'].sum()
+        ]
+        fig.add_trace(
+            go.Bar(x=['VIT Related', 'Non-VIT'], y=vit_revenue, name='VIT Analysis'),
+            row=3, col=2
+        )
+        
+        # Service quality indicator
+        avg_wait = self.df['waiting_time_minutes'].mean()
+        fig.add_trace(
+            go.Indicator(
+                mode="gauge+number",
+                value=avg_wait,
+                domain={'x': [0, 1], 'y': [0, 1]},
+                title={'text': "Avg Wait (min)"},
+                gauge={'axis': {'range': [None, 10]},
+                       'bar': {'color': "darkblue"},
+                       'steps': [{'range': [0, 5], 'color': "lightgray"},
+                                {'range': [5, 10], 'color': "gray"}],
+                       'threshold': {'line': {'color': "red", 'width': 4},
+                                    'thickness': 0.75, 'value': 7}}
+            ),
+            row=3, col=3
+        )
+        
+        fig.update_layout(
+            height=1200,
+            title_text="Rapido Transportation - Comprehensive Analytics Dashboard",
+            showlegend=False
+        )
+        
+        fig.write_html(f"{viz_dir}/comprehensive_dashboard.html")
+        print("  ✓ Comprehensive interactive dashboard created")
+    
+    def generate_power_bi_insights(self):
+        """Generate insights specifically for Power BI dashboard creation"""
+        print("\n🔄 Generating Power BI Integration Insights...")
+        
+        insights = {
+            'key_metrics': {
+                'total_revenue': f"₹{self.kpis['total_revenue']:,.2f}",
+                'total_trips': f"{self.kpis['total_trip_volume']:,}",
+                'avg_revenue_per_ride': f"₹{self.kpis['avg_revenue_per_ride']:.2f}",
+                'vit_dependency': f"{(self.kpis['vit_university_performance']['total_revenue'] / self.kpis['total_revenue'] * 100):.1f}%"
+            },
+            'time_patterns': {
+                'peak_hour': self.df.groupby('hour')['final_price'].sum().idxmax(),
+                'rush_hour_premium': f"{((self.df[self.df['is_rush_hour']]['final_price'].mean() / self.df[~self.df['is_rush_hour']]['final_price'].mean()) - 1) * 100:.1f}%"
+            },
+            'weather_insights': {
+                'rain_premium': f"{((self.df[self.df['weather_condition'] == 'Rain']['final_price'].mean() / self.df[self.df['weather_condition'] == 'Clear']['final_price'].mean()) - 1) * 100:.1f}%",
+                'best_weather_for_revenue': self.df.groupby('weather_condition')['final_price'].sum().idxmax()
+            },
+            'route_insights': {
+                'top_route': self.df.groupby('route')['final_price'].sum().idxmax(),
+                'most_frequent_route': self.df['route'].mode().iloc[0]
+            }
+        }
+        
+        return insights
     
     def analyze_rush_hour_patterns(self):
         """Detailed analysis of morning and evening rush hours"""
@@ -422,9 +749,22 @@ class RapidoBusinessIntelligence:
         
         os.makedirs(output_dir, exist_ok=True)
         
+        # Clean KPIs for JSON serialization
+        cleaned_kpis = {}
+        for key, value in self.kpis.items():
+            if isinstance(value, dict):
+                cleaned_value = {}
+                for k, v in value.items():
+                    # Convert complex keys to strings
+                    str_key = str(k) if not isinstance(k, (str, int, float, bool)) else k
+                    cleaned_value[str_key] = str(v) if not isinstance(v, (str, int, float, bool, type(None))) else v
+                cleaned_kpis[key] = cleaned_value
+            else:
+                cleaned_kpis[key] = str(value) if not isinstance(value, (str, int, float, bool, type(None))) else value
+        
         # Save KPIs
         with open(f"{output_dir}all_kpis.json", 'w') as f:
-            json.dump(self.kpis, f, indent=2, default=str)
+            json.dump(cleaned_kpis, f, indent=2, default=str)
         
         # Save rush hour analysis
         rush_hour_analysis, weekend_analysis = self.analyze_rush_hour_patterns()
@@ -448,7 +788,7 @@ class RapidoBusinessIntelligence:
         return output_dir
 
 def main():
-    """Main execution function"""
+    """Main execution function with hybrid Python + Power BI approach"""
     print("🚀 Starting Comprehensive BI Analysis for Rapido Transportation")
     print("=" * 70)
     
@@ -460,6 +800,13 @@ def main():
     
     # Calculate all KPIs
     kpis = analyzer.calculate_all_kpis()
+    
+    # Generate Python visualizations
+    print("\n🎨 Creating Interactive Python Visualizations...")
+    viz_dir = analyzer.create_python_visualizations()
+    
+    # Generate Power BI insights
+    power_bi_insights = analyzer.generate_power_bi_insights()
     
     # Perform specialized analyses
     rush_hour_analysis, weekend_analysis = analyzer.analyze_rush_hour_patterns()
@@ -485,13 +832,26 @@ def main():
             for insight in insight_list[:3]:  # Show top 3 insights per category
                 print(f"  • {insight}")
     
-    # Save results
+    print("\n🔗 POWER BI INTEGRATION READY:")
+    print(f"📈 Key Metrics: {power_bi_insights['key_metrics']}")
+    print(f"⏰ Time Patterns: {power_bi_insights['time_patterns']}")
+    print(f"🌦️ Weather Insights: {power_bi_insights['weather_insights']}")
+    print(f"🛣️ Route Insights: {power_bi_insights['route_insights']}")
+    
+    # Save results including Power BI integration data
     output_dir = analyzer.save_results()
     
-    print(f"\n✅ Analysis Complete! Results saved to: {output_dir}")
-    print("🔄 Ready for Power BI integration...")
+    # Save Power BI insights
+    import json
+    with open(f"{output_dir}power_bi_insights.json", 'w') as f:
+        json.dump(power_bi_insights, f, indent=2, default=str)
     
-    return analyzer, summary
+    print(f"\n✅ Hybrid Analysis Complete!")
+    print(f"📁 Python visualizations: {viz_dir}")
+    print(f"📁 Analysis results: {output_dir}")
+    print("🔄 Ready for Power BI dashboard creation...")
+    
+    return analyzer, summary, power_bi_insights
 
 if __name__ == "__main__":
-    analyzer, summary = main()
+    analyzer, summary, power_bi_insights = main()

@@ -102,4 +102,108 @@
     "Thunderstorm": 4451
   },
   "precipitation_impact": {
-    
+    "(-0.015, 2.994]": 1.563305882909745,
+    "(2.994, 5.988]": 1.5285929788620916,
+    "(5.988, 8.982]": 1.5203180473372782,
+    "(8.982, 11.976]": 1.5117913748617766,
+    "(11.976, 14.97]": 1.5390087352829471
+  },
+  "temperature_demand_correlation": -0.03640842482550433,
+  "visibility_impact": {
+    "(2.988, 5.4]": 11206,
+    "(5.4, 7.8]": 7574,
+    "(7.8, 10.2]": 28460,
+    "(10.2, 12.6]": 16904,
+    "(12.6, 15.0]": 24792
+  },
+  "storm_revenue_boost": 2.2820130307796,
+  "top_performing_routes": {
+    "('Katpadi', 'Vellore Fort')": 2140118.97,
+    "('VIT University', 'Green Circle')": 1732931.01,
+    "('VIT University', 'Vellore Railway Station')": 1628513.15,
+    "('VIT University', 'Bagayam')": 1429939.76,
+    "('VIT University', 'CMC Hospital')": 1294464.27,
+    "('Sathuvachari', 'Officer Line')": 1219932.8,
+    "('VIT University', 'Arcot Road')": 1098604.23,
+    "('Chittoor Road', 'Government Hospital')": 1028328.02,
+    "('Gandhi Nagar', 'New Bus Stand')": 895568.02,
+    "('VIT University', 'Vellore Institute of Technology')": 702355.85
+  },
+  "vit_university_performance": {
+    "total_revenue": 7886808.27,
+    "total_trips": 53602,
+    "avg_price": 147.13645516958323
+  },
+  "avg_distance_by_route": {
+    "('Chittoor Road', 'Government Hospital')": 4.309691551184622,
+    "('Gandhi Nagar', 'New Bus Stand')": 3.4991783137962127,
+    "('Katpadi', 'Vellore Fort')": 12.292286202964652,
+    "('Sathuvachari', 'Officer Line')": 5.902593185456209,
+    "('VIT University', 'Arcot Road')": 4.804388049755664,
+    "('VIT University', 'Bagayam')": 7.110013449899125,
+    "('VIT University', 'CMC Hospital')": 6.197521060316747,
+    "('VIT University', 'Green Circle')": 9.18377668492232,
+    "('VIT University', 'Vellore Institute of Technology')": 2.098234044931262,
+    "('VIT University', 'Vellore Railway Station')": 8.481969816420769
+  },
+  "route_profitability_index": {
+    "('VIT University', 'Vellore Institute of Technology')": 37.4132845751056,
+    "('Gandhi Nagar', 'New Bus Stand')": 28.847685161175605,
+    "('Chittoor Road', 'Government Hospital')": 26.666100149572955,
+    "('VIT University', 'Arcot Road')": 25.396139413311214,
+    "('Sathuvachari', 'Officer Line')": 23.631080689476693,
+    "('VIT University', 'CMC Hospital')": 23.460414600193236,
+    "('VIT University', 'Bagayam')": 22.541618783413835,
+    "('VIT University', 'Vellore Railway Station')": 21.62372408111865,
+    "('VIT University', 'Green Circle')": 21.090288527363395,
+    "('Katpadi', 'Vellore Fort')": 19.852063688187798
+  },
+  "popular_destinations": {
+    "Arcot Road": 9004,
+    "Government Hospital": 8948,
+    "Vellore Institute of Technology": 8947,
+    "Green Circle": 8947,
+    "Bagayam": 8922,
+    "CMC Hospital": 8903,
+    "Vellore Railway Station": 8879,
+    "New Bus Stand": 8872,
+    "Vellore Fort": 8770,
+    "Officer Line": 8746
+  },
+  "customer_demand_score": {
+    "count": 10.0,
+    "mean": 8893.8,
+    "std": 81.30026650222823,
+    "min": 8746.0,
+    "25%": 8873.75,
+    "50%": 8912.5,
+    "75%": 8947.0,
+    "max": 9004.0
+  },
+  "surge_pricing_effectiveness": 0.8569979469242437,
+  "market_penetration_by_area": {
+    "Chittoor Road": 8948,
+    "Gandhi Nagar": 8872,
+    "Katpadi": 8770,
+    "Sathuvachari": 8746,
+    "VIT University": 53602
+  },
+  "service_quality_index": {
+    "Chittoor Road": 0.25229797552585576,
+    "Gandhi Nagar": 0.25184512319745656,
+    "Katpadi": 0.25207668649938203,
+    "Sathuvachari": 0.24814163309311696,
+    "VIT University": 0.250145835180579
+  },
+  "competitive_pricing_analysis": 1.5522669720415605,
+  "revenue_growth_rate": 12.240776857918455,
+  "revenue_diversification": {
+    "auto": 39.97502715880529,
+    "bike": 36.83925843382561,
+    "cab": 23.185714407369083
+  },
+  "demand_forecasting_accuracy": 47.95679812946596,
+  "price_elasticity_of_demand": 0.14651344365637506,
+  "customer_satisfaction_proxy": 51.512064584317166,
+  "business_sustainability_index": 65.18676532300385
+}

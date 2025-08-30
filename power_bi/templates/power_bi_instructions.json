@@ -1,0 +1,73 @@
+{
+  "setup_phase": {
+    "title": "Phase 1: Power BI Setup & Data Import",
+    "steps": [
+      "1. Open Power BI Desktop",
+      "2. Import data from 'power_bi/data_model/rapido_dashboard_data.xlsx'",
+      "3. Verify all 5 tables are imported: FactRides, DimTime, DimHour, DimVehicle, DimWeather",
+      "4. Create relationships in Model view",
+      "5. Import all DAX measures from 'power_bi/measures/advanced_dax_measures.txt'"
+    ]
+  },
+  "page_creation": {
+    "title": "Phase 2: Dashboard Page Creation",
+    "executive_dashboard": [
+      "Create new page 'Executive Dashboard'",
+      "Add 4 KPI cards for: Total Revenue, Total Trips, Avg Revenue/Ride, VIT Dependency",
+      "Add monthly revenue trend line chart",
+      "Add vehicle revenue donut chart",
+      "Add top 10 routes horizontal bar chart",
+      "Apply executive color scheme: #2E86AB primary"
+    ],
+    "time_analysis": [
+      "Create new page 'Time Analysis'",
+      "Add 24-hour demand pattern line chart",
+      "Add rush hour vs regular column chart",
+      "Add hourly revenue stacked bar chart",
+      "Add weekend vs weekday area chart",
+      "Add time performance matrix table"
+    ],
+    "weather_impact": [
+      "Create new page 'Weather Impact'",
+      "Add weather revenue column chart",
+      "Add weather premium gauge chart",
+      "Add multiplier by weather bar chart",
+      "Add weather-wait time scatter plot",
+      "Add hourly weather trends line chart",
+      "Add weather revenue waterfall chart"
+    ]
+  },
+  "python_integration": {
+    "title": "Phase 3: Python Analysis Integration",
+    "validation_steps": [
+      "Cross-reference KPI values with Python analysis outputs",
+      "Validate Total Revenue matches: Expected \u20b913,170,756.08",
+      "Confirm rush hour patterns align with Python insights",
+      "Verify weather premium calculations",
+      "Check route rankings against Python analysis"
+    ],
+    "enhancement_options": [
+      "Embed Python HTML charts as web content (if supported)",
+      "Use Python insights for dynamic text boxes",
+      "Cross-validate all measures with Python outputs",
+      "Create Python-derived calculated columns if needed"
+    ]
+  },
+  "advanced_features": {
+    "title": "Phase 4: Advanced Dashboard Features",
+    "interactive_elements": [
+      "Add date range slicer",
+      "Add weather condition filter",
+      "Add vehicle type buttons",
+      "Add route search box",
+      "Configure cross-filtering between visuals"
+    ],
+    "formatting": [
+      "Apply consistent color scheme",
+      "Set up conditional formatting for KPIs",
+      "Add visual-level filters",
+      "Configure tooltip customizations",
+      "Set up mobile layout"
+    ]
+  }
+}

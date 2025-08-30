@@ -1,0 +1,46 @@
+{
+  "workflow_overview": {
+    "description": "Hybrid approach combining Python analytics with Power BI visualization",
+    "benefits": [
+      "Python provides deep statistical analysis and validation",
+      "Power BI offers professional dashboard interface",
+      "Cross-validation ensures data accuracy",
+      "Flexible analysis with powerful visualization"
+    ]
+  },
+  "data_flow": [
+    "1. Raw data (Dataset.csv) \u2192 Python analysis",
+    "2. Python generates: KPIs, insights, validation data, interactive charts",
+    "3. Clean data exported to Excel for Power BI",
+    "4. Power BI imports clean data + DAX measures",
+    "5. Power BI dashboard built with Python validation",
+    "6. Final dashboard combines both capabilities"
+  ],
+  "validation_checkpoints": {
+    "data_consistency": [
+      "Total Revenue: Python vs Power BI must match exactly",
+      "Trip counts: Verify consistency across platforms",
+      "Route rankings: Cross-check top 10 routes",
+      "Time patterns: Validate rush hour calculations"
+    ],
+    "measure_validation": [
+      "Each DAX measure should have Python equivalent",
+      "Weather premium calculations must align",
+      "VIT dependency percentages must match",
+      "Surge pricing impact should be consistent"
+    ]
+  },
+  "troubleshooting": {
+    "common_issues": [
+      "Data type mismatches: Ensure consistent formatting",
+      "Relationship errors: Verify key column matches",
+      "Measure conflicts: Check for circular dependencies",
+      "Performance issues: Optimize large datasets"
+    ],
+    "validation_failures": [
+      "If totals don't match: Check data import process",
+      "If trends differ: Verify date/time handling",
+      "If categories vary: Check text formatting consistency"
+    ]
+  }
+}

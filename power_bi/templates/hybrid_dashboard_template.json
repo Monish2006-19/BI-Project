@@ -1,0 +1,113 @@
+{
+  "dashboard_name": "Rapido Transportation Analytics - Hybrid Dashboard",
+  "created_date": "2025-08-30",
+  "version": "2.0 - Hybrid",
+  "key_metrics": {
+    "total_revenue": "\u20b913,170,756.08",
+    "total_trips": "88,938",
+    "avg_revenue_per_ride": "\u20b9148.09",
+    "surge_contribution": "35.6%",
+    "vit_dependency": "60.3%",
+    "peak_hour": "18",
+    "top_route": "Katpadi \u2192 Vellore Fort",
+    "rain_premium": "38.3%"
+  },
+  "pages": [
+    {
+      "name": "Executive Dashboard",
+      "visuals": [
+        {
+          "type": "KPI Card",
+          "title": "Total Revenue",
+          "measure": "Total Revenue"
+        },
+        {
+          "type": "KPI Card",
+          "title": "Total Trips",
+          "measure": "Total Trips"
+        },
+        {
+          "type": "KPI Card",
+          "title": "Avg Revenue/Ride",
+          "measure": "Average Revenue Per Ride"
+        },
+        {
+          "type": "KPI Card",
+          "title": "VIT Dependency",
+          "measure": "VIT Revenue Share"
+        },
+        {
+          "type": "Line Chart",
+          "title": "Revenue Trend",
+          "x": "DimTime[date]",
+          "y": "Total Revenue"
+        },
+        {
+          "type": "Donut Chart",
+          "title": "Vehicle Revenue",
+          "legend": "DimVehicle[vehicle_type]",
+          "values": "Total Revenue"
+        },
+        {
+          "type": "Bar Chart",
+          "title": "Top Routes",
+          "x": "Total Revenue",
+          "y": "FactRides[route]"
+        }
+      ]
+    },
+    {
+      "name": "Time Analysis",
+      "visuals": [
+        {
+          "type": "Line Chart",
+          "title": "24-Hour Demand",
+          "x": "DimHour[hour]",
+          "y": "Total Trips"
+        },
+        {
+          "type": "Column Chart",
+          "title": "Rush Hour Revenue",
+          "x": "DimHour[is_rush_hour]",
+          "y": "Rush Hour Revenue"
+        },
+        {
+          "type": "Area Chart",
+          "title": "Weekend vs Weekday",
+          "x": "DimTime[day_name]",
+          "y": "Weekend Revenue"
+        }
+      ]
+    },
+    {
+      "name": "Weather Impact",
+      "visuals": [
+        {
+          "type": "Column Chart",
+          "title": "Weather Revenue",
+          "x": "DimWeather[weather_condition]",
+          "y": "Total Revenue"
+        },
+        {
+          "type": "Gauge Chart",
+          "title": "Rain Premium",
+          "measure": "Weather Premium"
+        },
+        {
+          "type": "Scatter Plot",
+          "title": "Weather vs Wait Time",
+          "x": "Average Wait Time",
+          "y": "Average Multiplier"
+        }
+      ]
+    }
+  ],
+  "implementation_steps": [
+    "1. Import data from power_bi/data_model/rapido_dashboard_data.xlsx",
+    "2. Create relationships between tables",
+    "3. Import DAX measures from power_bi/measures/advanced_dax_measures.txt",
+    "4. Create dashboard pages as specified",
+    "5. Validate metrics against Python analysis",
+    "6. Apply formatting and interactivity"
+  ]
+}

@@ -1,0 +1,349 @@
+{
+  "dashboard_name": "Rapido Transportation Analytics - Hybrid Dashboard",
+  "created_date": "2025-08-30",
+  "version": "2.0 - Hybrid",
+  "integration_type": "Python + Power BI",
+  "python_insights": {
+    "total_revenue": 13170756.08,
+    "total_trips": 88938,
+    "avg_revenue_per_ride": 148.08918662439004,
+    "surge_contribution": 35.58740235966772,
+    "vit_dependency": 60.2689514043491,
+    "peak_hour": "18",
+    "top_route": "Katpadi \u2192 Vellore Fort",
+    "rain_premium": 38.34941254763022
+  },
+  "pages": [
+    {
+      "page_name": "Executive Dashboard",
+      "page_order": 1,
+      "description": "High-level KPIs, revenue trends, and business overview with Python insights",
+      "python_components": [
+        "comprehensive_dashboard.html",
+        "revenue_trend.html"
+      ],
+      "visuals": [
+        {
+          "type": "KPI Card",
+          "title": "Total Revenue",
+          "measure": "Total Revenue",
+          "format": "\u20b9 #,##0",
+          "python_validation": "N/A",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "color_scheme": "#2E86AB"
+        },
+        {
+          "type": "KPI Card",
+          "title": "Total Trips",
+          "measure": "Total Trips",
+          "format": "#,##0",
+          "python_validation": "N/A",
+          "position": {
+            "x": 220,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "color_scheme": "#4ECDC4"
+        },
+        {
+          "type": "KPI Card",
+          "title": "Average Revenue/Ride",
+          "measure": "Average Revenue Per Ride",
+          "format": "\u20b9 #,##0.00",
+          "python_validation": "N/A",
+          "position": {
+            "x": 440,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "color_scheme": "#45B7D1"
+        },
+        {
+          "type": "KPI Card",
+          "title": "VIT Dependency",
+          "measure": "VIT Revenue Share",
+          "format": "0.0%",
+          "python_validation": "N/A",
+          "position": {
+            "x": 660,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "color_scheme": "#FF6B6B"
+        },
+        {
+          "type": "Line Chart",
+          "title": "Monthly Revenue Trend",
+          "x_axis": "DimTime[month_name]",
+          "y_axis": "Total Revenue",
+          "python_reference": "revenue_trend.html",
+          "position": {
+            "x": 0,
+            "y": 120,
+            "width": 430,
+            "height": 250
+          },
+          "insights": "Python analysis shows seasonal patterns"
+        },
+        {
+          "type": "Donut Chart",
+          "title": "Revenue by Vehicle Type",
+          "legend": "DimVehicle[vehicle_type]",
+          "values": "Total Revenue",
+          "python_reference": "vehicle_analysis.html",
+          "position": {
+            "x": 450,
+            "y": 120,
+            "width": 410,
+            "height": 250
+          },
+          "color_palette": [
+            "#FF6B6B",
+            "#4ECDC4",
+            "#45B7D1"
+          ]
+        },
+        {
+          "type": "Horizontal Bar Chart",
+          "title": "Top 10 Routes by Revenue",
+          "x_axis": "Total Revenue",
+          "y_axis": "FactRides[route]",
+          "measure": "Route Revenue Rank",
+          "python_reference": "route_analysis.html",
+          "position": {
+            "x": 0,
+            "y": 390,
+            "width": 860,
+            "height": 300
+          },
+          "top_route": "N/A"
+        }
+      ]
+    },
+    {
+      "page_name": "Time Analysis",
+      "page_order": 2,
+      "description": "Rush hour patterns, hourly demand, and time-based insights",
+      "python_components": [
+        "time_analysis.html"
+      ],
+      "key_insights": {
+        "peak_hour": "N/A",
+        "rush_hour_premium": "N/A"
+      },
+      "visuals": [
+        {
+          "type": "Line Chart",
+          "title": "24-Hour Demand Pattern",
+          "x_axis": "DimHour[hour]",
+          "y_axis": "Total Trips",
+          "python_reference": "time_analysis.html",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 430,
+            "height": 300
+          },
+          "highlight_hours": [
+            8,
+            9,
+            17,
+            18
+          ]
+        },
+        {
+          "type": "Column Chart",
+          "title": "Rush Hour vs Regular Hours Revenue",
+          "x_axis": "DimHour[is_rush_hour]",
+          "y_axis": "Rush Hour Revenue",
+          "position": {
+            "x": 450,
+            "y": 0,
+            "width": 410,
+            "height": 300
+          },
+          "color_coding": {
+            "Rush": "#FF6B6B",
+            "Regular": "#4ECDC4"
+          }
+        },
+        {
+          "type": "Stacked Bar Chart",
+          "title": "Hourly Revenue Distribution",
+          "x_axis": "DimHour[hour]",
+          "y_axis": [
+            "Morning Rush Revenue",
+            "Evening Rush Revenue",
+            "Total Revenue"
+          ],
+          "position": {
+            "x": 0,
+            "y": 320,
+            "width": 430,
+            "height": 250
+          }
+        },
+        {
+          "type": "Area Chart",
+          "title": "Weekend vs Weekday Patterns",
+          "x_axis": "DimTime[day_name]",
+          "y_axis": [
+            "Weekend Revenue",
+            "Weekday Revenue"
+          ],
+          "position": {
+            "x": 450,
+            "y": 320,
+            "width": 410,
+            "height": 250
+          }
+        },
+        {
+          "type": "Matrix Table",
+          "title": "Time Performance Matrix",
+          "rows": "DimHour[hour]",
+          "columns": "DimTime[day_name]",
+          "values": "Average Revenue Per Ride",
+          "position": {
+            "x": 0,
+            "y": 590,
+            "width": 860,
+            "height": 200
+          }
+        }
+      ]
+    },
+    {
+      "page_name": "Weather Impact",
+      "page_order": 3,
+      "description": "Weather condition analysis with rain priority focus",
+      "python_components": [
+        "weather_analysis.html"
+      ],
+      "key_insights": {
+        "rain_premium": "N/A",
+        "best_weather": "N/A"
+      },
+      "visuals": [
+        {
+          "type": "Column Chart",
+          "title": "Revenue by Weather Condition",
+          "x_axis": "DimWeather[weather_condition]",
+          "y_axis": [
+            "Rain Revenue",
+            "Clear Revenue",
+            "Thunderstorm Revenue"
+          ],
+          "python_reference": "weather_analysis.html",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 280,
+            "height": 300
+          },
+          "highlight_rain": true
+        },
+        {
+          "type": "Gauge Chart",
+          "title": "Weather Premium Index",
+          "measure": "Weather Premium",
+          "min_value": 0,
+          "max_value": 3,
+          "position": {
+            "x": 300,
+            "y": 0,
+            "width": 280,
+            "height": 300
+          },
+          "thresholds": [
+            {
+              "value": 1.5,
+              "color": "yellow"
+            },
+            {
+              "value": 2.0,
+              "color": "red"
+            }
+          ]
+        },
+        {
+          "type": "Clustered Bar Chart",
+          "title": "Average Multiplier by Weather",
+          "x_axis": "DimWeather[weather_condition]",
+          "y_axis": "Average Multiplier",
+          "position": {
+            "x": 600,
+            "y": 0,
+            "width": 260,
+            "height": 300
+          }
+        },
+        {
+          "type": "Scatter Plot",
+          "title": "Weather Impact on Waiting Time",
+          "x_axis": "Average Wait Time",
+          "y_axis": "Average Multiplier",
+          "legend": "DimWeather[weather_condition]",
+          "position": {
+            "x": 0,
+            "y": 320,
+            "width": 420,
+            "height": 250
+          }
+        },
+        {
+          "type": "Line Chart",
+          "title": "Hourly Weather Premium Trends",
+          "x_axis": "DimHour[hour]",
+          "y_axis": "Weather Premium",
+          "legend": "DimWeather[weather_condition]",
+          "position": {
+            "x": 440,
+            "y": 320,
+            "width": 420,
+            "height": 250
+          }
+        },
+        {
+          "type": "Waterfall Chart",
+          "title": "Weather Impact on Revenue",
+          "category": "DimWeather[weather_condition]",
+          "measure": "Total Revenue",
+          "position": {
+            "x": 0,
+            "y": 590,
+            "width": 860,
+            "height": 200
+          }
+        }
+      ]
+    }
+  ],
+  "dashboard_settings": {
+    "theme": "Modern",
+    "color_palette": [
+      "#2E86AB",
+      "#4ECDC4",
+      "#45B7D1",
+      "#FF6B6B",
+      "#FFA07A"
+    ],
+    "font_family": "Segoe UI",
+    "background_color": "#F8F9FA",
+    "python_integration": true,
+    "interactive_filters": [
+      "DimTime[date]",
+      "DimWeather[weather_condition]",
+      "DimVehicle[vehicle_type]",
+      "FactRides[route]"
+    ]
+  }
+}

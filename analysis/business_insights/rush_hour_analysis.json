@@ -1,0 +1,8 @@
+{
+  "morning_rush": {
+    "total_trips": 11712,
+    "total_revenue": 1946853.51,
+    "avg_surge_multiplier": 1.737127732240437,
+    "avg_waiting_time": 3.9998292349726774,
+    "most_popular_routes": {
+      
