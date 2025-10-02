@@ -1,7 +1,7 @@
-# Hybrid Dashboard Implementation Guide
+# Ride Data Analytics & Prediction - Implementation Guide
 
 ## Overview
-This hybrid solution combines Python analytics with Power BI visualization.
+This hybrid solution for ride-sharing analytics and prediction combines Python analytics with Power BI visualization.
 
 ## Key Metrics (Python Validated)
 - Total Revenue: ₹13,170,756.08

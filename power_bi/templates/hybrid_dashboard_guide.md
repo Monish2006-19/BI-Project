@@ -1,7 +1,7 @@
-# Rapido Transportation Analytics - Hybrid Dashboard Guide
+# Ride Data Analytics & Prediction - Hybrid Dashboard Guide
 
 ## Overview
-This is a hybrid analytics solution combining Python-powered analysis with Power BI visualization capabilities.
+This is a hybrid analytics solution for ride-sharing data analytics and prediction, combining Python-powered analysis with Power BI visualization capabilities.
 
 ### Dashboard Structure
 - **Page 1**: Executive Dashboard (KPIs, trends, overview)
