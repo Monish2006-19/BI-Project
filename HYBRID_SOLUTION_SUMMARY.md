@@ -1,6 +1,9 @@
 # Ride Data Analytics & Prediction - Hybrid Dashboard Solution
 
-## 🎯 **What Was Created**
+## 🎯 **W## 📁 **File Structure Created**
+
+```text
+visualizat ions/Was Created**
 
 I've successfully created a **hybrid solution** that combines Python-powered analytics with Power BI dashboard specifications for ride-sharing data analytics and pricing prediction. Here's exactly what you now have:
 
@@ -75,7 +78,7 @@ I've successfully created a **hybrid solution** that combines Python-powered ana
 
 ## 📁 **File Structure Created**
 
-```
+```texttext
 visualizations/
   charts/
     ├── comprehensive_dashboard.html    # Master interactive dashboard
@@ -171,5 +174,5 @@ analysis/
 
 This hybrid solution gives you the analytical power of Python combined with the presentation capabilities of Power BI, ensuring you have both deep insights and professional visualization capabilities for your Rapido Transportation analytics project.
 
-Generated: August 30, 2025
-Repository: https://github.com/SheldonC2005/Ride-Data-Analytics-Prediction
+Generated: August 30, 2025  
+Repository: [https://github.com/SheldonC2005/Ride-Data-Analytics-Prediction](https://github.com/SheldonC2005/Ride-Data-Analytics-Prediction)
